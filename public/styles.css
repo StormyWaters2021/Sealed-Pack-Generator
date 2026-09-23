@@ -158,8 +158,9 @@ h2 {
 .pulls-panel {
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 36px);
   min-height: 0;
+  max-height: none;
+  overflow: hidden;
 }
 
 .opening-panel {

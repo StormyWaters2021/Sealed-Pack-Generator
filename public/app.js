@@ -13,6 +13,8 @@ const codeInput = el("codeInput");
 const openCodeBtn = el("openCodeBtn");
 const resultView = el("resultView");
 const emptyState = el("emptyState");
+const openingPanel = document.querySelector(".opening-panel");
+const pullsPanel = document.querySelector(".pulls-panel");
 const resultTitle = el("resultTitle");
 const resultCode = el("resultCode");
 const hierarchy = el("hierarchy");
@@ -29,6 +31,17 @@ function showToast(message) {
   toast.classList.add("show");
   clearTimeout(showToast.timer);
   showToast.timer = setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+function syncPullsPanelHeight() {
+  if (!openingPanel || !pullsPanel) return;
+
+  if (window.innerWidth <= 1080) {
+    pullsPanel.style.height = "";
+    return;
+  }
+
+  pullsPanel.style.height = `${openingPanel.getBoundingClientRect().height}px`;
 }
 
 async function api(path, options) {
@@ -394,6 +407,7 @@ function render(result) {
 
   renderHierarchy(result);
   renderPulls();
+  requestAnimationFrame(syncPullsPanelHeight);
 }
 
 function xmlEscape(value) {
@@ -495,6 +509,15 @@ hierarchy.addEventListener("click", (event) => {
 downloadO8dBtn.addEventListener("click", downloadO8d);
 themeToggle.addEventListener("click", toggleTheme);
 
+if (typeof ResizeObserver !== "undefined" && openingPanel) {
+  const panelObserver = new ResizeObserver(() => {
+    syncPullsPanelHeight();
+  });
+  panelObserver.observe(openingPanel);
+}
+
+window.addEventListener("resize", syncPullsPanelHeight);
+
 (async function init() {
   try {
     applyTheme(
@@ -504,6 +527,7 @@ themeToggle.addEventListener("click", toggleTheme);
 
     await loadSets();
     setKind("case");
+    requestAnimationFrame(syncPullsPanelHeight);
 
     const code = new URL(window.location.href).searchParams.get("code");
 
