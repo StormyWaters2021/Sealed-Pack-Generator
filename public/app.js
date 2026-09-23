@@ -21,6 +21,7 @@ const hierarchy = el("hierarchy");
 const pullList = el("pullList");
 const pullsEmpty = el("pullsEmpty");
 const pullCount = el("pullCount");
+const clearPullsBtn = el("clearPullsBtn");
 const downloadArea = el("downloadArea");
 const downloadO8dBtn = el("downloadO8dBtn");
 const themeToggle = el("themeToggle");
@@ -167,10 +168,6 @@ function groupLabel(card) {
   if (card.prime) return `Prime · ${card.rarity}`;
   if (card.rarity === "Chase") return "Chase";
 
-  if (card.rarity === "Super Rare" && card.unit_type === "Equipment") {
-    return "Super Rare Equipment";
-  }
-
   if (card.rarity === "Super Rare") return "Super Rare";
   if (card.rarity === "Rare") return "Rare";
   if (card.rarity === "Uncommon") return "Uncommon";
@@ -184,7 +181,6 @@ const groupOrder = [
   "Prime · Rare",
   "Chase",
   "Super Rare",
-  "Super Rare Equipment",
   "Rare",
   "Uncommon",
   "Common",
@@ -266,6 +262,7 @@ function renderPulls() {
   pullsEmpty.classList.toggle("hidden", hasCards);
   pullList.classList.toggle("hidden", !hasCards);
   downloadArea.classList.toggle("hidden", !hasCards);
+  clearPullsBtn.disabled = !hasCards;
   pullList.innerHTML = html;
 }
 
@@ -308,6 +305,18 @@ function openPack(brickIndex, packIndex) {
   state.openedPacks.set(code, pack);
 
   renderHierarchy(state.result);
+  renderPulls();
+}
+
+
+function clearPulls() {
+  state.openedPacks.clear();
+  state.newModelIds.clear();
+
+  if (state.result) {
+    renderHierarchy(state.result);
+  }
+
   renderPulls();
 }
 
@@ -507,6 +516,7 @@ hierarchy.addEventListener("click", (event) => {
 });
 
 downloadO8dBtn.addEventListener("click", downloadO8d);
+clearPullsBtn.addEventListener("click", clearPulls);
 themeToggle.addEventListener("click", toggleTheme);
 
 if (typeof ResizeObserver !== "undefined" && openingPanel) {

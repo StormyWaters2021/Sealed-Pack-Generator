@@ -180,6 +180,33 @@ h2 {
   margin-bottom: 14px;
 }
 
+.pulls-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.clear-btn {
+  min-height: 28px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--muted);
+  padding: 0 9px;
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.clear-btn:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--input-focus-border);
+}
+
+.clear-btn:disabled {
+  opacity: .45;
+  cursor: default;
+}
+
 .field {
   display: block;
   margin-bottom: 18px;
