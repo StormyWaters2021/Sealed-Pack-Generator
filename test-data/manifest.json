@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "games": [
+    {
+      "id": "heroclix",
+      "code": "HC",
+      "name": "HeroClix",
+      "metadata_path": "games/heroclix/game.json",
+      "sets": [
+        {
+          "id": "thunderbolts",
+          "code": "TB",
+          "name": "Marvel HeroClix: Thunderbolts",
+          "current_config_version": 1,
+          "engine_version": 1,
+          "config_path": "games/heroclix/sets/thunderbolts/configs/v1.json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1225 @@
+{
+  "schema_version": 1,
+  "set_id": "thunderbolts",
+  "set_name": "Thunderbolts",
+  "source": "set.xml",
+  "cards": [
+    {
+      "model_id": "331ba34f-b550-43da-b286-cc83d58afd1e",
+      "name": "Winter Soldier",
+      "collector_number": "001",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "bb3b2932-a58a-4446-8a4e-0ca4252876ef",
+      "name": "Blackout",
+      "collector_number": "002",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "4f7bf9a4-6504-45cf-88d1-2d10cfdfb690",
+      "name": "H.A.M.M.E.R. Agent",
+      "collector_number": "003",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": "Generic"
+    },
+    {
+      "model_id": "c5d21988-43a4-4bc1-bb60-0fb089ec026e",
+      "name": "Raft Informant",
+      "collector_number": "004",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": "Generic"
+    },
+    {
+      "model_id": "37be451f-ea27-41df-82c3-9a1445cf0bf2",
+      "name": "Cletus Kasady",
+      "collector_number": "004b",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "f2a23caf-e430-4a0f-bd09-abbaf8ed4cc7",
+      "name": "Raft Escapee",
+      "collector_number": "005",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": "Generic"
+    },
+    {
+      "model_id": "57aadb4e-ce46-4ec9-95b8-7c432bed53a9",
+      "name": "Brothers Grimm",
+      "collector_number": "006",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "891dbf6c-811b-4dc5-a23c-6783a2c871e7",
+      "name": "Ultron Drone",
+      "collector_number": "007",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": "Generic | Expendable Goon"
+    },
+    {
+      "model_id": "544533b3-1ded-4b76-af0d-99135070780d",
+      "name": "Ultron",
+      "collector_number": "007b",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "9254e006-2473-4c96-8f12-f2cea1fd50bc",
+      "name": "Ultron Drone",
+      "collector_number": "007bt",
+      "unit_type": "Bystander",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "552b5887-b3c2-4e34-93fd-3fed6cabeed6",
+      "name": "Doombot",
+      "collector_number": "008",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": "Expendable Goon"
+    },
+    {
+      "model_id": "2317f5d4-d0d9-45d1-89dc-cf9ab5018229",
+      "name": "Contessa Valentina Allegra de Fontaine (LMD)",
+      "collector_number": "009",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "38f0e05f-03ee-4e6e-ac9a-e811e7704bd2",
+      "name": "Madame Hydra",
+      "collector_number": "009b",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "273a1a53-64d6-497e-a512-0e0a1ada4be1",
+      "name": "Leviathan Horde",
+      "collector_number": "009bbt",
+      "unit_type": "Bystander",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "de548299-35d8-4979-a9e9-738cbc855f0f",
+      "name": "Ghost",
+      "collector_number": "010",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "909b6e8a-9dec-4e69-a802-f0af7fcd72b2",
+      "name": "X-Ray",
+      "collector_number": "011",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "9a730b0a-61c2-4294-8b3c-10251dcb93d9",
+      "name": "Living Laser",
+      "collector_number": "012",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "dfdaf99f-65a6-42d3-b265-e86d1f00e24e",
+      "name": "Elektra",
+      "collector_number": "013",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "ab790a20-0607-441e-b535-a1e3006e7a99",
+      "name": "Daredevil",
+      "collector_number": "014",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "7c489d02-d88f-4a31-90aa-4cff38a071f4",
+      "name": "Luke Cage",
+      "collector_number": "015",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "3c5d41ee-b0fb-4c5d-97fb-7514748f2ed0",
+      "name": "Jessica Jones",
+      "collector_number": "016",
+      "unit_type": "Character",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "5f9c3488-dd67-48bf-b1d6-2ce14339844e",
+      "name": "The Revolution",
+      "collector_number": "017",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": "Sideline Active"
+    },
+    {
+      "model_id": "ca3b521c-98a6-41f3-bd80-95e4e4b3609b",
+      "name": "Klaw",
+      "collector_number": "018",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "4223aa40-499b-44e4-b943-1016fbc0f9ea",
+      "name": "Eel",
+      "collector_number": "018b",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "a3b96aeb-d6bb-491a-b7cb-4b7afbaac697",
+      "name": "The Destroyer",
+      "collector_number": "019",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "96575673-b9e1-4952-8d1e-545b189f1b11",
+      "name": "Purple Man",
+      "collector_number": "020",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "ee48d55e-9612-499e-a019-92f3b922c41c",
+      "name": "Bushwacker",
+      "collector_number": "021",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "83007f1d-5dfa-4a87-be10-8f84c5090608",
+      "name": "U.S. Agent's Shield",
+      "collector_number": "022a",
+      "unit_type": "Equipment",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "41c65b77-0ef3-41e3-b4b4-cf0f5ff07345",
+      "name": "Red Guardian's Shield",
+      "collector_number": "022b",
+      "unit_type": "Equipment",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "4b13dfe5-3832-4e27-9616-fa71bfcd301d",
+      "name": "Ultron",
+      "collector_number": "023",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "c82c65c9-10e5-4495-bf7c-4088dea5c8b3",
+      "name": "Dr. Doom",
+      "collector_number": "024",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "72d91464-46e5-4cd1-b720-0d9c80db4505",
+      "name": "Contessa Valentina Allegra de Fontaine",
+      "collector_number": "025",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "d58ca735-6a9c-45c1-b055-ac51cf681a3e",
+      "name": "Ghost",
+      "collector_number": "026",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "cc5b4713-6c07-4468-8b48-7444e61b2542",
+      "name": "Blizzard",
+      "collector_number": "027",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "dd7643c8-32ca-4da6-a6da-73eefe100f68",
+      "name": "Living Laser",
+      "collector_number": "028",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "c240f401-79c2-414a-9db0-635827b68268",
+      "name": "Baron Zemo",
+      "collector_number": "029",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "3b4f2cb5-1db2-4615-9704-6df332f7e2e7",
+      "name": "Bullseye",
+      "collector_number": "030",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "82432a75-7b7c-4f61-a96e-d5b25969809c",
+      "name": "Kingpin",
+      "collector_number": "031",
+      "unit_type": "Character",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "44cc5f2e-e0e7-4343-9dc2-4031a7e207f9",
+      "name": "Whirlwind",
+      "collector_number": "032",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "65410fe9-d858-4314-ba85-72de076db5e2",
+      "name": "Swordsman",
+      "collector_number": "033",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "2cb461a4-e9fb-4523-af9c-9981d0cd2b82",
+      "name": "Jester",
+      "collector_number": "034",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "cdf9926e-8b68-446b-a273-0a3b725a626b",
+      "name": "Mister Hyde",
+      "collector_number": "035",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "a70b2fcd-18bd-4287-a8ab-aab633cc72e8",
+      "name": "Trapster",
+      "collector_number": "036",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "975a7e0c-6f1c-48b7-8e9c-b5f89f6e9947",
+      "name": "Ironclad",
+      "collector_number": "037a",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "1be6c518-f945-4c59-9e2c-9c2ce8ca83d8",
+      "name": "Red Hulk",
+      "collector_number": "037b",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": true,
+      "properties": "Prime"
+    },
+    {
+      "model_id": "f9d16bf9-86f0-49c9-a4a9-98e0c8683d99",
+      "name": "Mercy",
+      "collector_number": "037bbt",
+      "unit_type": "Bystander",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "85e8f042-36d4-4cc7-bf67-21bb9a70fb82",
+      "name": "Mach-1",
+      "collector_number": "038",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "1df61220-35f8-424d-b3fd-e7ad2509a825",
+      "name": "Meteorite",
+      "collector_number": "039",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "b089c7b4-86a1-40e9-bd99-b059247dafe5",
+      "name": "Vapor",
+      "collector_number": "040",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "b1435f9d-6a22-4be4-be12-6e7d24a95400",
+      "name": "Iron Fist",
+      "collector_number": "041a",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "c14767a4-ef56-4417-97d0-0e0f6d2dae03",
+      "name": "Iron Fist",
+      "collector_number": "041b",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": true,
+      "properties": "Prime"
+    },
+    {
+      "model_id": "2dd4176d-d67a-4785-87d6-8d21e3371093",
+      "name": "Balder",
+      "collector_number": "042",
+      "unit_type": "Character",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "47932bf4-adb5-4f2a-af43-912eda060aa3",
+      "name": "Laussa",
+      "collector_number": "042s",
+      "unit_type": "Terrain Marker",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "46b622f2-84ce-456e-8030-34eb1cd5e01d",
+      "name": "Hyperion",
+      "collector_number": "043a",
+      "unit_type": "Character",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "3b768316-a7d2-4082-9d13-7e0f07c3a239",
+      "name": "Sentry",
+      "collector_number": "043b",
+      "unit_type": "Character",
+      "rarity": "Super Rare",
+      "prime": true,
+      "properties": "Prime"
+    },
+    {
+      "model_id": "2560df34-52b2-4731-a278-45406ae32477",
+      "name": "Shang-Chi",
+      "collector_number": "044",
+      "unit_type": "Character",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "a65e959a-0cad-429c-a805-2eb177e7d37f",
+      "name": "Daredevil",
+      "collector_number": "045",
+      "unit_type": "Character",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "9448a4eb-897a-44f4-a954-6d434523bae9",
+      "name": "Atlas",
+      "collector_number": "046",
+      "unit_type": "Character",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "39eb2b91-8841-4074-9e31-1ca9d21c413a",
+      "name": "U.S. Agent",
+      "collector_number": "047a",
+      "unit_type": "Character",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "d04e5ea7-bb55-46ec-831c-18e7c87ff5b4",
+      "name": "Red Guardian",
+      "collector_number": "047b",
+      "unit_type": "Character",
+      "rarity": "Super Rare",
+      "prime": true,
+      "properties": "Prime"
+    },
+    {
+      "model_id": "e346790b-ed8a-4784-bdc6-12df3b04ed65",
+      "name": "Songbird",
+      "collector_number": "048",
+      "unit_type": "Character",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "74ec6cfc-7531-473c-be55-98fe7c0c6e65",
+      "name": "Techno",
+      "collector_number": "049",
+      "unit_type": "Character",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "2b4b1fc6-6ade-405e-b3a7-ef5d82b94564",
+      "name": "Batroc the Leaper",
+      "collector_number": "050",
+      "unit_type": "Character",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "12f38867-67e5-460b-a7b5-f9b6f5448557",
+      "name": "Vector",
+      "collector_number": "052",
+      "unit_type": "Character",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "e0e5292b-1b2a-46a9-afe8-44a39d4337f9",
+      "name": "Baron Zemo",
+      "collector_number": "053",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "65da7812-9487-4aff-86fb-c6d640b76d0f",
+      "name": "Void",
+      "collector_number": "054",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "e63a51c2-0cce-4753-80a8-91798ea65491",
+      "name": "Luke Cage",
+      "collector_number": "055",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "986b9740-4c6e-4f0f-9052-eabf4c792a1c",
+      "name": "White Widow",
+      "collector_number": "056",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "e7363b35-f5fd-4a63-ad0b-c6d809dc27f7",
+      "name": "Tony Stark",
+      "collector_number": "057",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "f63eb87e-6997-4e8d-b541-106885630ebe",
+      "name": "Hawkeye",
+      "collector_number": "058",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "b8c96671-643f-4c54-8dff-4bc24da062d4",
+      "name": "Citizen V",
+      "collector_number": "059",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "ef081ad4-f1b5-4110-906b-0c81e145fb35",
+      "name": "Mayor Kingpin",
+      "collector_number": "060",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "83f527f4-300e-441b-9b9c-e079c09c5058",
+      "name": "Winter Soldier",
+      "collector_number": "061",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "afdd46e5-3b3d-43d6-a59f-3e37bb201e4a",
+      "name": "Citizen V",
+      "collector_number": "062",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "8097bc36-e51a-4c81-83ad-18fe990a899b",
+      "name": "Baron Zemo",
+      "collector_number": "099",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "7c50324a-d574-4fc7-8c81-585ed430cf51",
+      "name": "Bullseye",
+      "collector_number": "100",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "5ae2083c-6b71-49de-9c7b-f289d484aaa9",
+      "name": "Kingpin",
+      "collector_number": "101",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "d7597454-4714-4cbd-832c-f2b1afc8e4d5",
+      "name": "Doctor Doom",
+      "collector_number": "200",
+      "unit_type": "Character",
+      "rarity": "Chase",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "3d90cb11-ddfd-4e4a-b093-e6f28b463600",
+      "name": "Deadpool",
+      "collector_number": "L001a",
+      "unit_type": "Legacy Card",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "89eb9777-93ad-4257-a516-d90e40e17392",
+      "name": "Egghead",
+      "collector_number": "L004",
+      "unit_type": "Legacy Card",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "29e15ed9-483c-4836-9a8f-e12985f0afef",
+      "name": "Radioactive Man",
+      "collector_number": "L016",
+      "unit_type": "Legacy Card",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "c589bea4-bb98-43c5-b171-3236ba4c3cdb",
+      "name": "Rhino",
+      "collector_number": "L020",
+      "unit_type": "Legacy Card",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "222393bb-bf1b-47ed-b878-c6434ce5a23f",
+      "name": "Jolt",
+      "collector_number": "L031a",
+      "unit_type": "Legacy Card",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "9aea3904-945c-4360-a312-10f8fd1261e1",
+      "name": "Crimson Cowl",
+      "collector_number": "L031b",
+      "unit_type": "Legacy Card",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "590c542d-42b9-4109-88a2-a328f94dc9c1",
+      "name": "Beetle",
+      "collector_number": "L033",
+      "unit_type": "Legacy Card",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "6ceccd05-2fc4-4f09-b203-572db64a6d0d",
+      "name": "Iron Patriot",
+      "collector_number": "L039a",
+      "unit_type": "Legacy Card",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "6897874d-dfd9-4dd4-b0b2-ba95273cbe6d",
+      "name": "Troll",
+      "collector_number": "L039b",
+      "unit_type": "Legacy Card",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "fce7a6b3-062c-480c-928a-5a8bbcb7bda1",
+      "name": "Count Nefaria",
+      "collector_number": "L048a",
+      "unit_type": "Legacy Card",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "de626bf1-6533-40fe-af9e-c06e49f739a5",
+      "name": "Doctor Octopus",
+      "collector_number": "L055",
+      "unit_type": "Legacy Card",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "a08dcdd2-dafd-47ed-8bb2-12858e8c7b90",
+      "name": "The Cube (Indoor)",
+      "collector_number": "M001",
+      "unit_type": "Map",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "efd71369-73a8-4d74-82f8-fcbc8728252c",
+      "name": "Castle Zemo",
+      "collector_number": "M002",
+      "unit_type": "Map",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "0d995715-ccc4-4493-be76-d1d7d00c8a20",
+      "name": "The Cube (Outdoor)",
+      "collector_number": "M003",
+      "unit_type": "Map",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "a232f1c9-7fbe-4d6d-a6a4-85501b513958",
+      "name": "Thunderbolts' Mountain",
+      "collector_number": "M004",
+      "unit_type": "Map",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "408c56b3-c320-4427-87a5-3ea2e62b6494",
+      "name": "Acid Vat",
+      "collector_number": "MV62-t001",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "d9debbfb-2889-43c8-ada8-03670da34a49",
+      "name": "Glue Trap",
+      "collector_number": "MV62-t002",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "df04cc7c-c8a3-4780-9983-04e15735404d",
+      "name": "Jack in the Box",
+      "collector_number": "MV62-t003",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "4a2d8e95-8942-4024-82d5-e792a474109d",
+      "name": "Catapult",
+      "collector_number": "MV62-t004",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "632fb151-a727-4392-add5-1277790abe08",
+      "name": "Buzzsaw",
+      "collector_number": "MV62-t005",
+      "unit_type": "Terrain Marker",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "a0409179-86a8-4577-96e6-8d545693cafe",
+      "name": "Zap Trap",
+      "collector_number": "MV62-t006",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "4c1a47a8-035f-453d-86f7-9317a4f895a1",
+      "name": "Electrical Box",
+      "collector_number": "MV62-t007",
+      "unit_type": "Terrain Marker",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "64eab312-3cd9-48fb-b696-dbae0374efd4",
+      "name": "Security Camera",
+      "collector_number": "MV62-t009",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "8ba24618-3074-4ba9-a7f1-c7950f38fbdb",
+      "name": "Throne",
+      "collector_number": "MV62-t011",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "cf3d8675-9f25-41eb-b6ae-659586b31e2e",
+      "name": "Secret Entrance [2]",
+      "collector_number": "MV62-t013",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "387834a5-b0e4-4352-9a2a-86721375b737",
+      "name": "Weight Bench",
+      "collector_number": "MV62-t017",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "379f7307-7a8f-4f32-8069-2bb7a76523cf",
+      "name": "Weight Rack",
+      "collector_number": "MV62-t018",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "4c262c50-8214-4164-b519-52c1a9d27125",
+      "name": "Life Model Decoy",
+      "collector_number": "OS002",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "2f6a3207-8eca-47b4-9c49-42affb9b85f6",
+      "name": "Eegro the Unbreakable",
+      "collector_number": "OS003",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "acb6d2c4-2b49-4f02-96ad-a8525317e4ed",
+      "name": "Eegro",
+      "collector_number": "OS003bt",
+      "unit_type": "Bystander",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "08f0e91e-cf1e-4a17-b5fb-d940465c39aa",
+      "name": "Transquilizer Blaster",
+      "collector_number": "OS004",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "ecb351b7-1e76-4f2d-a204-90e722238e67",
+      "name": "Superhuman Registration Act",
+      "collector_number": "OS005",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "b8766ad3-ac48-4267-ba4f-c6b1ce34aa75",
+      "name": "Raft Breakout",
+      "collector_number": "OS006",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "41b5bd98-b490-4129-8b38-63c8b7489cb7",
+      "name": "Redemption",
+      "collector_number": "OS007",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "70fa4b87-de81-410b-90e3-d6ea423a8324",
+      "name": "Betrayal",
+      "collector_number": "OS008",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "2d4eed58-42d2-4c1d-80f4-67a7c45d23b9",
+      "name": "Contessa's Scheme",
+      "collector_number": "OS009",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "91ff3592-d50a-4601-95d0-9454d75467f8",
+      "name": "Fixer's Blueprint",
+      "collector_number": "OS010",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "6e7cb7ad-ab43-41fc-916b-7d517f59e408",
+      "name": "Ultron's Blueprint",
+      "collector_number": "OS011",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "c705e8fb-f509-468f-b03f-7ec5d20f2e34",
+      "name": "Doom's Blueprint",
+      "collector_number": "OS012",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "17cef10f-725a-4deb-b316-07d26c0abc8d",
+      "name": "Kobik's Help",
+      "collector_number": "OS013",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "37508b1f-8762-474b-8da4-9a282c8ac572",
+      "name": "Shield Throw",
+      "collector_number": "OS014",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "05cd9e11-3040-4078-ad11-11e0497dcd96",
+      "name": "Fortify",
+      "collector_number": "OS015",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "9738ca6d-82fd-434b-81a8-29ab4275197a",
+      "name": "Zemo's Scheme",
+      "collector_number": "OS016",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "9c821ae1-e4ee-4f93-a17f-ae040f9e5d1c",
+      "name": "Book of Zemo",
+      "collector_number": "OS017",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "68b507b5-c19f-43a6-86bf-69fe959a17d2",
+      "name": "Death Locket",
+      "collector_number": "051",
+      "unit_type": "Character",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": "Unique"
+    },
+    {
+      "model_id": "c19a39e9-de48-4947-9da2-b7762ee810b5",
+      "name": "Crossbones",
+      "collector_number": "L009",
+      "unit_type": "Legacy Card",
+      "rarity": "Common",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "8988db40-353d-4b1b-8d8b-14bbb22f64e9",
+      "name": "Black Ant",
+      "collector_number": "L028",
+      "unit_type": "Legacy Card",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "f67e6333-4a8e-41e9-87ba-0df830139ccb",
+      "name": "Superia",
+      "collector_number": "L032",
+      "unit_type": "Legacy Card",
+      "rarity": "Uncommon",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "01c31c5f-6e77-43f6-a707-8394995770fa",
+      "name": "Citizen V",
+      "collector_number": "L036",
+      "unit_type": "Legacy Card",
+      "rarity": "Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "ad5acc42-32e1-48fd-a63c-31e972a61bb2",
+      "name": "Taskmaster",
+      "collector_number": "L048b",
+      "unit_type": "Legacy Card",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "96f5130b-6c3f-4bdd-9cf9-f9a7283405d4",
+      "name": "Darkforce",
+      "collector_number": "MV62-t008",
+      "unit_type": "Terrain Marker",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "b01853bf-a73a-4f62-b10d-354906766993",
+      "name": "Iron Bars",
+      "collector_number": "MV62-t010",
+      "unit_type": "Terrain Marker",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "08112939-719a-4668-b617-94a581470750",
+      "name": "Secret Entrance [1]",
+      "collector_number": "MV62-t012",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "04e8a3e5-b4fa-4837-860e-58a1a26b908c",
+      "name": "Boulder",
+      "collector_number": "MV62-t014",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "ee408e5c-5641-496d-ac15-3076276753a6",
+      "name": "Boulder Trap",
+      "collector_number": "MV62-t015",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "89627276-371d-4b72-8f18-60989c1e0804",
+      "name": "Pine Tree",
+      "collector_number": "MV62-t016",
+      "unit_type": "Terrain Marker",
+      "rarity": "Super Rare",
+      "prime": false,
+      "properties": ""
+    },
+    {
+      "model_id": "06a3f53c-f660-45a3-b925-83f1ef37ad45",
+      "name": "Justice Like Lightning!",
+      "collector_number": "OS001",
+      "unit_type": "One Shot",
+      "rarity": "",
+      "prime": false,
+      "properties": ""
+    }
+  ],
+  "catalog_version": 1,
+  "game_id": "heroclix"
+}

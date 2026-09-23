@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>HeroClix Sealed Pool Generator</title>
+  <meta name="description" content="Generate reproducible HeroClix sealed packs, bricks, and cases.">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="site-header">
+      <div>
+        <div class="eyebrow">Sealed collation simulator</div>
+        <h1>HeroClix Sealed Pool Generator</h1>
+        <p class="subtitle">Generate a pack, brick, or complete case from a reproducible share code.</p>
+      </div>
+      <div class="header-badge">No accounts · No saved data</div>
+    </header>
+
+    <main class="layout">
+      <section class="control-panel card">
+        <div class="section-heading">
+          <div>
+            <span class="step">01</span>
+            <h2>Generate</h2>
+          </div>
+        </div>
+
+        <label class="field">
+          <span>Set</span>
+          <select id="setSelect"></select>
+        </label>
+
+        <div class="field">
+          <span>Product</span>
+          <div class="segmented" id="kindPicker">
+            <button type="button" data-kind="pack">Pack</button>
+            <button type="button" data-kind="brick">Brick</button>
+            <button type="button" data-kind="case" class="active">Case</button>
+          </div>
+        </div>
+
+        <button id="generateBtn" class="primary-btn" type="button">Generate case</button>
+
+        <div class="divider"><span>or</span></div>
+
+        <label class="field">
+          <span>Open a shared code</span>
+          <div class="inline-field">
+            <input id="codeInput" type="text" autocomplete="off" spellcheck="false"
+              placeholder="HC-TB-V1-G1-XXXXXXXXXX-B1-P01">
+            <button id="openCodeBtn" type="button" class="secondary-btn">Open</button>
+          </div>
+        </label>
+
+        <div class="help">
+          The code is the verification key. The same code always recreates the same sealed product for that rules version.
+        </div>
+      </section>
+
+      <section class="opening-panel card">
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">✦</div>
+          <h2>Ready to crack a case</h2>
+          <p>Choose a set and product type, or paste a code someone shared with you.</p>
+        </div>
+
+        <div id="resultView" class="hidden">
+          <div class="result-topline">
+            <div>
+              <div class="eyebrow" id="resultKind">Case</div>
+              <h2 id="resultTitle">Thunderbolts Case</h2>
+            </div>
+            <button id="shareBtn" class="icon-btn" type="button">Copy share link</button>
+          </div>
+
+          <div class="code-card">
+            <div>
+              <span class="code-label">Verification code</span>
+              <code id="resultCode"></code>
+            </div>
+            <button id="copyCodeBtn" class="secondary-btn compact" type="button">Copy</button>
+          </div>
+
+          <div id="hierarchy"></div>
+        </div>
+      </section>
+
+      <aside class="pulls-panel card">
+        <div class="section-heading compact-heading">
+          <div>
+            <span class="step">02</span>
+            <h2>Pulls</h2>
+          </div>
+          <span id="pullCount" class="count-pill">0</span>
+        </div>
+
+        <div id="pullsEmpty" class="pulls-empty">
+          Generated pulls will appear here, sorted by rarity.
+        </div>
+        <div id="pullList" class="pull-list hidden"></div>
+
+        <div id="downloadArea" class="download-area hidden">
+          <button id="downloadO8dBtn" class="primary-btn ghost" type="button">
+            Download OCTGN deck
+          </button>
+          <p>Filename includes the verification code.</p>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>

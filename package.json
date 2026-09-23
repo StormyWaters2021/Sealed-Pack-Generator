@@ -1,0 +1,16 @@
+{
+  "name": "heroclix-case-generator",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node tools/smoke.mjs && node tools/code-smoke.mjs",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0",
+    "typescript": "^5.8.0"
+  }
+}

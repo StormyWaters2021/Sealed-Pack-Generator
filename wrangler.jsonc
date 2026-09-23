@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pack-generator",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-22",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*"
+    ]
+  },
+  "vars": {
+    "DATA_BASE_URL": "https://raw.githubusercontent.com/StormyWaters2021/Pack-Generator-Data/main/"
+  }
+}

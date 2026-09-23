@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "id": "heroclix",
+  "code": "HC",
+  "name": "HeroClix",
+  "integrations": {
+    "octgn": {
+      "game_id": "dabf7f85-249a-48ee-9d42-8f59adf60185",
+      "default_section": "Team"
+    }
+  }
+}
