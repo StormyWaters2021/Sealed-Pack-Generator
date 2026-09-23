@@ -35,20 +35,25 @@ function uniqueScopeFor(config: SetConfig, pool: string): UniqueScope {
 
 function drawCard(
   poolName: string, category: string, pools: Record<string, CatalogCard[]>,
-  config: SetConfig, state: GenerationState, rng: RandomSource
+  config: SetConfig, state: GenerationState, rng: RandomSource, boosterUsed?: Set<string>
 ): GeneratedCard {
   const pool = pools[poolName];
   if (!pool?.length) throw new Error(`Missing or empty pool '${poolName}'`);
 
   const scope = uniqueScopeFor(config, poolName);
   let eligible = pool;
-  if (scope === "brick") eligible = pool.filter((c) => !state.brickUsed.has(c.model_id));
-  if (scope === "case") eligible = pool.filter((c) => !state.caseUsed.has(c.model_id));
-  if (!eligible.length) throw new Error(`Pool '${poolName}' exhausted under ${scope} uniqueness`);
+  if (scope === "brick") eligible = eligible.filter((c) => !state.brickUsed.has(c.model_id));
+  if (scope === "case") eligible = eligible.filter((c) => !state.caseUsed.has(c.model_id));
+  if (boosterUsed) eligible = eligible.filter((c) => !boosterUsed.has(c.model_id));
+  if (!eligible.length) {
+    const detail = boosterUsed ? `${scope} + booster` : scope;
+    throw new Error(`Pool '${poolName}' exhausted under ${detail} uniqueness`);
+  }
 
   const card = eligible[rng.int(eligible.length)];
   if (scope === "brick") state.brickUsed.add(card.model_id);
   if (scope === "case") state.caseUsed.add(card.model_id);
+  if (boosterUsed) boosterUsed.add(card.model_id);
   return { ...card, category, pool: poolName };
 }
 
@@ -122,7 +127,7 @@ function applyPrimes(
 
 function assignExtras(
   boosters: BoosterResult[], config: SetConfig, pools: Record<string, CatalogCard[]>,
-  state: GenerationState, rng: RandomSource
+  state: GenerationState, rng: RandomSource, boosterUsed?: Set<string>[]
 ): void {
   const extras = config.brick.extras;
   if (!extras?.groups?.length) return;
@@ -164,7 +169,7 @@ function assignExtras(
 
     const x = shuffled[i];
     boosters[target].extras.push(
-      drawCard(x.pool, x.category, pools, config, state, rng),
+      drawCard(x.pool, x.category, pools, config, state, rng, boosterUsed?.[target]),
     );
     extraCounts[target]++;
   }
@@ -196,18 +201,33 @@ export function generateBrick(
   const state: GenerationState = { caseUsed, brickUsed: new Set<string>() };
   const primeReplacements = applyPrimes(slotPlan, config, pools, state, rng);
 
+  // G2 adds booster-level uniqueness while G1 remains byte-for-byte compatible
+  // with previously issued codes. Duplicates may still appear in different
+  // boosters, bricks, and cases according to each pool's configured scope.
+  const enforceBoosterUniqueness = config.engine_version >= 2;
+  const boosterUsed = enforceBoosterUniqueness
+    ? slotPlan.map(() => new Set<string>())
+    : undefined;
+
   const boosters: BoosterResult[] = slotPlan.map((slots, boosterIndex) => ({
     booster_index: boosterIndex + 1,
     profile: profileSlots[boosterIndex],
     cards: slots.map((slot, slotIndex) => {
+      const used = boosterUsed?.[boosterIndex];
       const prime = primeReplacements.get(`${boosterIndex}:${slotIndex}`);
-      if (prime) return { ...prime, category: slot.category, pool: config.brick.prime!.pool };
-      return drawCard(slot.pool, slot.category, pools, config, state, rng);
+      if (prime) {
+        if (used?.has(prime.model_id)) {
+          throw new Error(`Prime '${prime.name}' would duplicate another pull in booster ${boosterIndex + 1}`);
+        }
+        used?.add(prime.model_id);
+        return { ...prime, category: slot.category, pool: config.brick.prime!.pool };
+      }
+      return drawCard(slot.pool, slot.category, pools, config, state, rng, used);
     }),
     extras: []
   }));
 
-  assignExtras(boosters, config, pools, state, rng);
+  assignExtras(boosters, config, pools, state, rng, boosterUsed);
   return { brick_index: brickIndex, boosters, summary: summarizeBrick(boosters) };
 }
 

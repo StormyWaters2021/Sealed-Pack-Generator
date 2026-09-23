@@ -47,13 +47,17 @@ function syncPullsPanelHeight() {
 
 async function api(path, options) {
   const response = await fetch(path, options);
-  const data = await response.json();
+  const payload = await response.json();
 
-  if (!response.ok || data.error) {
-    throw new Error(data.error || `HTTP ${response.status}`);
+  if (!response.ok || payload.ok === false) {
+    const message =
+      payload?.error?.message ||
+      payload?.error ||
+      `HTTP ${response.status}`;
+    throw new Error(message);
   }
 
-  return data;
+  return payload.ok === true ? payload.data : payload;
 }
 
 function shortSetName(name) {
@@ -133,7 +137,7 @@ async function generate() {
       body: JSON.stringify({
         game,
         set,
-        kind: state.kind,
+        product: state.kind === "brick" ? "box" : state.kind,
       }),
     });
 

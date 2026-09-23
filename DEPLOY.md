@@ -70,7 +70,7 @@ The result should be identical.
 
 You can also share a URL like:
 
-`https://YOUR-WORKER.workers.dev/?code=HC-TB-V1-G1-7M4Q2P8ABC-B2-P07`
+`https://YOUR-WORKER.workers.dev/?code=HC-TB-V2-G2-7M4Q2P8ABC-B2-P07`
 
 ## Updating collation later
 

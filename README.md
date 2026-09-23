@@ -8,15 +8,15 @@ There are **no accounts and no database**. Every opening is recreated entirely f
 
 Example case:
 
-`HC-TB-V1-G1-7M4Q2P8ABC`
+`HC-TB-V2-G2-7M4Q2P8ABC`
 
 Example brick:
 
-`HC-HC-TB-V1-G1-7M4Q2P8ABC-B2`
+`HC-TB-V2-G2-7M4Q2P8ABC-B2`
 
 Example pack:
 
-`HC-HC-HC-TB-V1-G1-7M4Q2P8ABC-B2-P07`
+`HC-TB-V2-G2-7M4Q2P8ABC-B2-P07`
 
 The fields mean:
 
@@ -84,7 +84,7 @@ data/
 
 The config and catalog files are fetched at runtime and cached briefly, so adding a new set or switching to a new config version does not require changing the website code.
 
-## Thunderbolts V1 model
+## Thunderbolts V2 model
 
 The included starting configuration uses:
 
@@ -174,7 +174,7 @@ The OCTGN integration should never invent its own randomness.
 
 It should request/open a share code and announce the exact code in chat, for example:
 
-`Sealed Pool: HC-HC-HC-TB-V1-G1-7M4Q2P8ABC-B2-P07`
+`Sealed Pool: HC-TB-V2-G2-7M4Q2P8ABC-B2-P07`
 
 Anyone can paste that code into the website and verify the identical pack.
 
@@ -205,8 +205,18 @@ The page uses the same core light/dark palette as the TCG Deck Builder:
 
 The selected theme is stored locally in the browser.
 
-## Thunderbolts V1 insert placement
+## Thunderbolts V2 insert placement
 
-Thunderbolts V1 is still the working pre-release configuration. It currently keeps the brick-level baseline of 8 One-Shots and 4 terrain pieces, but does not force exactly one insert into every booster. Inserts are distributed deterministically across the brick with a maximum of two per booster.
+Thunderbolts V2 is the current configuration. It currently keeps the brick-level baseline of 8 One-Shots and 4 terrain pieces, but does not force exactly one insert into every booster. Inserts are distributed deterministically across the brick with a maximum of two per booster.
 
-Do not create V2 until V1 is explicitly declared live/frozen.
+V1/G1 remains preserved for deterministic reproduction of existing codes; new Thunderbolts generation uses V2/G2.
+
+
+## API split
+
+The Worker exposes two interfaces over the same deterministic generation core:
+
+- `/api/*` — standard public JSON API with normal HTTP methods, headers, request bodies, response bodies, and status codes.
+- `/octgn/*` — OCTGN adapter using form-urlencoded input and tab-delimited plain-text output.
+
+The API/interface work preserves Thunderbolts V1/G1 collation, seed interpretation, and existing share-code reproduction. New generation uses V2/G2.

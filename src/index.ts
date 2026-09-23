@@ -14,6 +14,7 @@ import {
   BoosterResult,
   BrickResult,
   CaseResult,
+  GameMetadata,
   ManifestGame,
   ManifestSet,
   OpenedPool,
@@ -28,6 +29,17 @@ interface Env {
   ASSETS: AssetBinding;
 }
 
+class ApiError extends Error {
+  code: string;
+  status: number;
+
+  constructor(code: string, message: string, status = 400) {
+    super(message);
+    this.code = code;
+    this.status = status;
+  }
+}
+
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data, null, 2), {
     status,
@@ -38,6 +50,66 @@ function json(data: unknown, status = 200): Response {
   });
 }
 
+function apiOk<T>(data: T, status = 200): Response {
+  return json({ ok: true, data }, status);
+}
+
+function apiError(error: ApiError): Response {
+  return json(
+    {
+      ok: false,
+      error: {
+        code: error.code,
+        message: error.message,
+      },
+    },
+    error.status,
+  );
+}
+
+function textResponse(body: string, status = 200): Response {
+  return new Response(body.endsWith("\n") ? body : `${body}\n`, {
+    status,
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
+function sanitizeField(value: unknown): string {
+  return String(value ?? "").replace(/[\t\r\n]+/g, " ").trim();
+}
+
+function octgnOk(lines: string[]): Response {
+  return textResponse(["OK", ...lines].join("\n"), 200);
+}
+
+function octgnError(code: string, message: string): Response {
+  return textResponse(
+    [
+      "ERROR",
+      `CODE\t${sanitizeField(code)}`,
+      `MESSAGE\t${sanitizeField(message)}`,
+    ].join("\n"),
+    200,
+  );
+}
+
+function normalizeProduct(value: string): "case" | "brick" | "pack" {
+  const normalized = value.trim().toLowerCase();
+
+  if (normalized === "case") return "case";
+  if (normalized === "box" || normalized === "brick") return "brick";
+  if (normalized === "pack" || normalized === "booster") return "pack";
+
+  throw new ApiError(
+    "INVALID_PRODUCT_TYPE",
+    "Product must be case, box/brick, or pack.",
+    400,
+  );
+}
+
 function rngSeed(
   game: ManifestGame,
   setInfo: ManifestSet,
@@ -45,13 +117,7 @@ function rngSeed(
   engineVersion: number,
   seed: string,
 ): string {
-  return [
-    game.id,
-    setInfo.id,
-    `V${configVersion}`,
-    `G${engineVersion}`,
-    seed,
-  ].join("|");
+  return [game.id, setInfo.id, `V${configVersion}`, `G${engineVersion}`, seed].join("|");
 }
 
 function selectionRng(seedText: string): SeededRandom {
@@ -100,7 +166,13 @@ function openExistingSelection(
   }
 
   const brick = generatedCase.bricks[brickIndex - 1];
-  if (!brick) throw new Error(`Brick ${brickIndex} does not exist in this case.`);
+  if (!brick) {
+    throw new ApiError(
+      "INVALID_BOX_INDEX",
+      `Box/brick ${brickIndex} does not exist in this case.`,
+      400,
+    );
+  }
 
   if (packIndex === undefined) {
     return { kind: "brick", selected: brick };
@@ -108,10 +180,42 @@ function openExistingSelection(
 
   const pack = brick.boosters[packIndex - 1];
   if (!pack) {
-    throw new Error(`Pack ${packIndex} does not exist in brick ${brickIndex}.`);
+    throw new ApiError(
+      "INVALID_PACK_INDEX",
+      `Pack ${packIndex} does not exist in box/brick ${brickIndex}.`,
+      400,
+    );
   }
 
   return { kind: "pack", selected: pack };
+}
+
+function translateConfigError(error: unknown): never {
+  const message = error instanceof Error ? error.message : String(error);
+
+  if (/Unknown game '/i.test(message)) {
+    throw new ApiError("GAME_NOT_CONFIGURED", message, 404);
+  }
+  if (/Unknown game code/i.test(message)) {
+    throw new ApiError("UNKNOWN_GAME_CODE", message, 404);
+  }
+  if (/Unknown set '/i.test(message)) {
+    throw new ApiError("SET_NOT_CONFIGURED", message, 404);
+  }
+  if (/Unknown set code/i.test(message)) {
+    throw new ApiError("UNKNOWN_SET_CODE", message, 404);
+  }
+  if (/Failed to fetch .*\/v\d+\.json/i.test(message)) {
+    throw new ApiError("CONFIG_VERSION_NOT_FOUND", message, 404);
+  }
+  if (/Failed to fetch/i.test(message)) {
+    throw new ApiError("CONFIG_LOAD_FAILED", message, 502);
+  }
+  if (/Generator G\d+ is not supported/i.test(message)) {
+    throw new ApiError("ENGINE_VERSION_NOT_SUPPORTED", message, 400);
+  }
+
+  throw new ApiError("GENERATION_FAILED", message, 500);
 }
 
 async function generateFromSeed(
@@ -123,111 +227,79 @@ async function generateFromSeed(
   seed: string,
   bypassCache: boolean,
 ) {
-  if (engineVersion !== 1) {
-    throw new Error(`Generator G${engineVersion} is not supported by this deployment.`);
-  }
-
-  const [loaded, gameMetadata] = await Promise.all([
-    loadSetVersion(game, setInfo, configVersion, env.DATA_BASE_URL, bypassCache),
-    loadGameMetadata(game, env.DATA_BASE_URL, bypassCache),
-  ]);
-
-  if (loaded.config.engine_version !== engineVersion) {
-    throw new Error(
-      `Code requests G${engineVersion}, but config V${configVersion} expects G${loaded.config.engine_version}.`,
+  if (engineVersion !== 1 && engineVersion !== 2) {
+    throw new ApiError(
+      "ENGINE_VERSION_NOT_SUPPORTED",
+      `Generator G${engineVersion} is not supported by this deployment.`,
+      400,
     );
   }
 
-  const seedText = rngSeed(
-    game,
-    setInfo,
-    configVersion,
-    engineVersion,
-    seed,
-  );
+  try {
+    const [loaded, gameMetadata] = await Promise.all([
+      loadSetVersion(game, setInfo, configVersion, env.DATA_BASE_URL, bypassCache),
+      loadGameMetadata(game, env.DATA_BASE_URL, bypassCache),
+    ]);
 
-  const generatedCase = generateCase(
-    1,
-    loaded.config,
-    loaded.catalog,
-    new SeededRandom(seedText),
-  );
+    if (loaded.config.engine_version !== engineVersion) {
+      throw new ApiError(
+        "ENGINE_VERSION_NOT_SUPPORTED",
+        `Code requests G${engineVersion}, but config V${configVersion} expects G${loaded.config.engine_version}.`,
+        400,
+      );
+    }
 
-  return {
-    generatedCase,
-    loaded,
-    gameMetadata,
-    seedText,
-  };
+    const seedText = rngSeed(game, setInfo, configVersion, engineVersion, seed);
+
+    const generatedCase = generateCase(
+      1,
+      loaded.config,
+      loaded.catalog,
+      new SeededRandom(seedText),
+    );
+
+    return {
+      generatedCase,
+      gameMetadata,
+      seedText,
+    };
+  } catch (error) {
+    if (error instanceof ApiError) throw error;
+    translateConfigError(error);
+  }
 }
 
-async function handleGenerate(
-  request: Request,
-  env: Env,
-  bypassCache: boolean,
-): Promise<Response> {
-  const body = (await request.json()) as {
-    game?: string;
-    set?: string;
-    kind?: "pack" | "brick" | "case";
-    seed?: string;
-  };
+function makeOpenedPool(
+  game: ManifestGame,
+  setInfo: ManifestSet,
+  configVersion: number,
+  engineVersion: number,
+  seed: string,
+  kind: "case" | "brick" | "pack",
+  generatedCase: CaseResult,
+  selected: CaseResult | BrickResult | BoosterResult,
+  integrations: GameMetadata["integrations"] | undefined,
+  brickIndex?: number,
+  packIndex?: number,
+): OpenedPool {
+  const cCode = caseCode(game.code, setInfo.code, configVersion, engineVersion, seed);
 
-  if (!body.game) throw new Error("'game' is required.");
-  if (!body.set) throw new Error("'set' is required.");
-
-  if (!body.kind || !["pack", "brick", "case"].includes(body.kind)) {
-    throw new Error("'kind' must be pack, brick, or case.");
-  }
-
-  const { manifest } = await loadManifest(env.DATA_BASE_URL, bypassCache);
-  const game = findGameById(manifest, body.game);
-  const setInfo = findSetById(game, body.set);
-
-  const configVersion = setInfo.current_config_version;
-  const engineVersion = setInfo.engine_version;
-  const seed = body.seed?.trim().toUpperCase() || randomSeed();
-
-  const generated = await generateFromSeed(
-    env,
-    game,
-    setInfo,
-    configVersion,
-    engineVersion,
-    seed,
-    bypassCache,
-  );
-
-  const cCode = caseCode(
-    game.code,
-    setInfo.code,
-    configVersion,
-    engineVersion,
-    seed,
-  );
-
-  const selectedInfo = selectKind(
-    generated.generatedCase,
-    body.kind,
-    generated.seedText,
-  );
-
-  const opened: OpenedPool = {
-    kind: body.kind,
+  return {
+    kind,
     code:
-      body.kind === "case"
+      kind === "case"
         ? cCode
-        : body.kind === "brick"
-          ? brickCode(cCode, selectedInfo.brickIndex!)
-          : packCode(cCode, selectedInfo.brickIndex!, selectedInfo.packIndex!),
+        : kind === "brick"
+          ? brickCode(cCode, brickIndex!)
+          : packCode(cCode, brickIndex!, packIndex!),
     case_code: cCode,
     brick_code:
-      selectedInfo.brickIndex !== undefined
-        ? brickCode(cCode, selectedInfo.brickIndex)
+      brickIndex !== undefined
+        ? brickCode(cCode, brickIndex)
         : undefined,
     pack_code:
-      selectedInfo.packIndex !== undefined
-        ? packCode(cCode, selectedInfo.brickIndex!, selectedInfo.packIndex)
+      packIndex !== undefined
+        ? packCode(cCode, brickIndex!, packIndex)
         : undefined,
     game,
     set: setInfo,
@@ -236,77 +308,442 @@ async function handleGenerate(
       engine_version: engineVersion,
     },
     seed,
-    selected: selectedInfo.selected,
-    generated_case: generated.generatedCase,
-    integrations: generated.gameMetadata.integrations,
+    selected,
+    generated_case: generatedCase,
+    integrations,
   };
-
-  return json(opened);
 }
 
-async function handleOpen(
-  url: URL,
+async function generateProduct(
   env: Env,
+  gameId: string,
+  setId: string,
+  product: string,
+  seedInput: string | undefined,
   bypassCache: boolean,
-): Promise<Response> {
-  const codeValue = url.searchParams.get("code");
-  if (!codeValue) throw new Error("'code' query parameter is required.");
+): Promise<OpenedPool> {
+  try {
+    const { manifest } = await loadManifest(env.DATA_BASE_URL, bypassCache);
+    const game = findGameById(manifest, gameId);
+    const setInfo = findSetById(game, setId);
+    const kind = normalizeProduct(product);
 
-  const parsed = parsePoolCode(codeValue);
+    const configVersion = setInfo.current_config_version;
+    const engineVersion = setInfo.engine_version;
+    const seed = seedInput?.trim().toUpperCase() || randomSeed();
+
+    const generated = await generateFromSeed(
+      env,
+      game,
+      setInfo,
+      configVersion,
+      engineVersion,
+      seed,
+      bypassCache,
+    );
+
+    const selectedInfo = selectKind(
+      generated.generatedCase,
+      kind,
+      generated.seedText,
+    );
+
+    return makeOpenedPool(
+      game,
+      setInfo,
+      configVersion,
+      engineVersion,
+      seed,
+      kind,
+      generated.generatedCase,
+      selectedInfo.selected,
+      generated.gameMetadata.integrations,
+      selectedInfo.brickIndex,
+      selectedInfo.packIndex,
+    );
+  } catch (error) {
+    if (error instanceof ApiError) throw error;
+    translateConfigError(error);
+  }
+}
+
+async function openProduct(
+  env: Env,
+  codeValue: string,
+  bypassCache: boolean,
+): Promise<OpenedPool> {
+  let parsed;
+  try {
+    parsed = parsePoolCode(codeValue);
+  } catch (error) {
+    throw new ApiError(
+      "INVALID_CODE",
+      error instanceof Error ? error.message : "Invalid sealed product code.",
+      400,
+    );
+  }
+
+  try {
+    const { manifest } = await loadManifest(env.DATA_BASE_URL, bypassCache);
+    const game = findGameByCode(manifest, parsed.gameCode);
+    const setInfo = findSetByCode(game, parsed.setCode);
+
+    const generated = await generateFromSeed(
+      env,
+      game,
+      setInfo,
+      parsed.configVersion,
+      parsed.engineVersion,
+      parsed.seed,
+      bypassCache,
+    );
+
+    const selection = openExistingSelection(
+      generated.generatedCase,
+      parsed.brickIndex,
+      parsed.packIndex,
+    );
+
+    return makeOpenedPool(
+      game,
+      setInfo,
+      parsed.configVersion,
+      parsed.engineVersion,
+      parsed.seed,
+      selection.kind,
+      generated.generatedCase,
+      selection.selected,
+      generated.gameMetadata.integrations,
+      parsed.brickIndex,
+      parsed.packIndex,
+    );
+  } catch (error) {
+    if (error instanceof ApiError) throw error;
+    translateConfigError(error);
+  }
+}
+
+function publicGamesPayload(manifest: { games: ManifestGame[] }) {
+  return {
+    games: manifest.games.map((game) => ({
+      id: game.id,
+      code: game.code,
+      name: game.name,
+      sets: game.sets.map((setInfo) => ({
+        id: setInfo.id,
+        code: setInfo.code,
+        name: setInfo.name,
+        current_config_version: setInfo.current_config_version,
+        engine_version: setInfo.engine_version,
+        products: {
+          case: "Case",
+          box: game.id === "heroclix" ? "Brick" : "Box",
+          pack: "Pack",
+        },
+      })),
+    })),
+  };
+}
+
+async function parseJsonGenerateRequest(request: Request): Promise<{
+  game: string;
+  set: string;
+  product: string;
+  seed?: string;
+}> {
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    throw new ApiError(
+      "UNSUPPORTED_MEDIA_TYPE",
+      "Public API generation requests must use Content-Type: application/json.",
+      415,
+    );
+  }
+
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    throw new ApiError(
+      "INVALID_REQUEST_BODY",
+      "Request body is not valid JSON.",
+      400,
+    );
+  }
+
+  if (!body || typeof body !== "object") {
+    throw new ApiError(
+      "INVALID_REQUEST_BODY",
+      "Request body must be a JSON object.",
+      400,
+    );
+  }
+
+  const value = body as Record<string, unknown>;
+  const game = String(value.game ?? "").trim();
+  const set = String(value.set ?? "").trim();
+  const product = String(value.product ?? value.kind ?? "").trim();
+  const seed = value.seed === undefined ? undefined : String(value.seed).trim();
+
+  if (!game) throw new ApiError("MISSING_GAME", "'game' is required.", 400);
+  if (!set) throw new ApiError("MISSING_SET", "'set' is required.", 400);
+  if (!product) throw new ApiError("MISSING_PRODUCT", "'product' is required.", 400);
+
+  return { game, set, product, seed };
+}
+
+function selectedCards(opened: OpenedPool) {
+  if (opened.kind === "pack") {
+    const pack = opened.selected as BoosterResult;
+    return [...pack.cards, ...(pack.extras || [])];
+  }
+
+  if (opened.kind === "brick") {
+    const brick = opened.selected as BrickResult;
+    return brick.boosters.flatMap((pack) => [
+      ...pack.cards,
+      ...(pack.extras || []),
+    ]);
+  }
+
+  const generatedCase = opened.selected as CaseResult;
+  return generatedCase.bricks.flatMap((brick) =>
+    brick.boosters.flatMap((pack) => [
+      ...pack.cards,
+      ...(pack.extras || []),
+    ]),
+  );
+}
+
+function flattenModels(
+  opened: OpenedPool,
+): Array<{ model_id: string; qty: number }> {
+  const counts = new Map<string, number>();
+
+  for (const card of selectedCards(opened)) {
+    counts.set(card.model_id, (counts.get(card.model_id) ?? 0) + 1);
+  }
+
+  return [...counts.entries()].map(([model_id, qty]) => ({
+    model_id,
+    qty,
+  }));
+}
+
+async function resolveGameByOctgnId(
+  env: Env,
+  octgnGameId: string,
+  bypassCache: boolean,
+): Promise<ManifestGame> {
   const { manifest } = await loadManifest(env.DATA_BASE_URL, bypassCache);
 
-  const game = findGameByCode(manifest, parsed.gameCode);
-  const setInfo = findSetByCode(game, parsed.setCode);
+  for (const game of manifest.games) {
+    try {
+      const metadata = await loadGameMetadata(
+        game,
+        env.DATA_BASE_URL,
+        bypassCache,
+      );
 
-  const generated = await generateFromSeed(
-    env,
-    game,
-    setInfo,
-    parsed.configVersion,
-    parsed.engineVersion,
-    parsed.seed,
-    bypassCache,
+      if (metadata.integrations?.octgn?.game_id === octgnGameId) {
+        return game;
+      }
+    } catch {
+      // Ignore unrelated broken game metadata during discovery.
+    }
+  }
+
+  throw new ApiError(
+    "GAME_NOT_CONFIGURED",
+    "No sealed-product configuration was found for this OCTGN game.",
+    404,
   );
+}
 
-  const selection = openExistingSelection(
-    generated.generatedCase,
-    parsed.brickIndex,
-    parsed.packIndex,
-  );
+async function handlePublicApi(
+  request: Request,
+  env: Env,
+  url: URL,
+  bypassCache: boolean,
+): Promise<Response> {
+  if (url.pathname === "/api/health" && request.method === "GET") {
+    return apiOk({
+      service: "pack-generator",
+      engine_version: 1,
+    });
+  }
 
-  const cCode = caseCode(
-    game.code,
-    setInfo.code,
-    parsed.configVersion,
-    parsed.engineVersion,
-    parsed.seed,
-  );
+  if (
+    (url.pathname === "/api/games" || url.pathname === "/api/sets") &&
+    request.method === "GET"
+  ) {
+    const loaded = await loadManifest(env.DATA_BASE_URL, bypassCache);
+    return apiOk(publicGamesPayload(loaded.manifest));
+  }
 
-  const opened: OpenedPool = {
-    kind: selection.kind,
-    code: parsed.raw,
-    case_code: cCode,
-    brick_code:
-      parsed.brickIndex !== undefined
-        ? brickCode(cCode, parsed.brickIndex)
-        : undefined,
-    pack_code:
-      parsed.packIndex !== undefined
-        ? packCode(cCode, parsed.brickIndex!, parsed.packIndex)
-        : undefined,
-    game,
-    set: setInfo,
-    config: {
-      version: parsed.configVersion,
-      engine_version: parsed.engineVersion,
-    },
-    seed: parsed.seed,
-    selected: selection.selected,
-    generated_case: generated.generatedCase,
-    integrations: generated.gameMetadata.integrations,
-  };
+  if (url.pathname === "/api/generate" && request.method === "POST") {
+    const body = await parseJsonGenerateRequest(request);
+    const opened = await generateProduct(
+      env,
+      body.game,
+      body.set,
+      body.product,
+      body.seed,
+      bypassCache,
+    );
+    return apiOk(opened);
+  }
 
-  return json(opened);
+  if (url.pathname === "/api/open" && request.method === "GET") {
+    const codeValue = url.searchParams.get("code");
+
+    if (!codeValue) {
+      throw new ApiError(
+        "MISSING_CODE",
+        "'code' query parameter is required.",
+        400,
+      );
+    }
+
+    const opened = await openProduct(env, codeValue, bypassCache);
+    return apiOk(opened);
+  }
+
+  throw new ApiError("NOT_FOUND", "API endpoint not found.", 404);
+}
+
+async function handleOctgnApi(
+  request: Request,
+  env: Env,
+  url: URL,
+  bypassCache: boolean,
+): Promise<Response> {
+  try {
+    if (url.pathname === "/octgn/sets" && request.method === "GET") {
+      const gameId = url.searchParams.get("gameid")?.trim();
+
+      if (!gameId) {
+        return octgnError("MISSING_GAME_ID", "gameid is required.");
+      }
+
+      const game = await resolveGameByOctgnId(
+        env,
+        gameId,
+        bypassCache,
+      );
+
+      return octgnOk([
+        `GAME\t${sanitizeField(game.name)}`,
+        ...game.sets.map((setInfo) =>
+          [
+            "SET",
+            sanitizeField(setInfo.id),
+            sanitizeField(setInfo.code),
+            sanitizeField(setInfo.name),
+          ].join("\t"),
+        ),
+      ]);
+    }
+
+    if (url.pathname === "/octgn/generate" && request.method === "POST") {
+      const contentType =
+        request.headers.get("content-type")?.toLowerCase() ?? "";
+
+      if (!contentType.includes("application/x-www-form-urlencoded")) {
+        return octgnError(
+          "UNSUPPORTED_MEDIA_TYPE",
+          "OCTGN generation requests must be form-urlencoded.",
+        );
+      }
+
+      const params = new URLSearchParams(await request.text());
+      const octgnGameId = params.get("gameid")?.trim() ?? "";
+      const setId = params.get("set")?.trim() ?? "";
+      const product = params.get("product")?.trim() ?? "";
+      const seed = params.get("seed")?.trim() || undefined;
+
+      if (!octgnGameId) {
+        return octgnError("MISSING_GAME_ID", "gameid is required.");
+      }
+      if (!setId) {
+        return octgnError("MISSING_SET", "set is required.");
+      }
+      if (!product) {
+        return octgnError("MISSING_PRODUCT", "product is required.");
+      }
+
+      const game = await resolveGameByOctgnId(
+        env,
+        octgnGameId,
+        bypassCache,
+      );
+
+      const opened = await generateProduct(
+        env,
+        game.id,
+        setId,
+        product,
+        seed,
+        bypassCache,
+      );
+
+      return octgnOk([
+        `CODE\t${sanitizeField(opened.code)}`,
+        `PRODUCT\t${sanitizeField(
+          opened.kind === "brick" ? "box" : opened.kind,
+        )}`,
+        `DISPLAY\t${sanitizeField(
+          opened.kind === "brick"
+            ? "Brick"
+            : opened.kind[0].toUpperCase() + opened.kind.slice(1),
+        )}`,
+        ...flattenModels(opened).map(
+          (item) =>
+            `MODEL\t${sanitizeField(item.model_id)}\t${item.qty}`,
+        ),
+      ]);
+    }
+
+    if (url.pathname === "/octgn/open" && request.method === "GET") {
+      const codeValue = url.searchParams.get("code")?.trim();
+
+      if (!codeValue) {
+        return octgnError("MISSING_CODE", "code is required.");
+      }
+
+      const opened = await openProduct(
+        env,
+        codeValue,
+        bypassCache,
+      );
+
+      return octgnOk([
+        `CODE\t${sanitizeField(opened.code)}`,
+        `PRODUCT\t${sanitizeField(
+          opened.kind === "brick" ? "box" : opened.kind,
+        )}`,
+        `DISPLAY\t${sanitizeField(
+          opened.kind === "brick"
+            ? "Brick"
+            : opened.kind[0].toUpperCase() + opened.kind.slice(1),
+        )}`,
+        ...flattenModels(opened).map(
+          (item) =>
+            `MODEL\t${sanitizeField(item.model_id)}\t${item.qty}`,
+        ),
+      ]);
+    }
+
+    return octgnError("NOT_FOUND", "OCTGN endpoint not found.");
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return octgnError(error.code, error.message);
+    }
+
+    const message =
+      error instanceof Error ? error.message : String(error);
+
+    return octgnError("INTERNAL_ERROR", message);
+  }
 }
 
 export default {
@@ -316,40 +753,43 @@ export default {
 
     try {
       if (!env.DATA_BASE_URL) {
-        throw new Error("DATA_BASE_URL is not configured.");
+        throw new ApiError(
+          "CONFIG_LOAD_FAILED",
+          "DATA_BASE_URL is not configured.",
+          500,
+        );
       }
 
-      if (url.pathname === "/api/health") {
-        return json({
-          ok: true,
-          service: "pack-generator",
-          engine_version: 1,
-          data_base_url: env.DATA_BASE_URL,
-        });
+      if (url.pathname.startsWith("/octgn/")) {
+        return await handleOctgnApi(
+          request,
+          env,
+          url,
+          bypassCache,
+        );
       }
 
-      if (url.pathname === "/api/sets" && request.method === "GET") {
-        const loaded = await loadManifest(env.DATA_BASE_URL, bypassCache);
-        return json(loaded.manifest);
-      }
-
-      if (url.pathname === "/api/generate" && request.method === "POST") {
-        return await handleGenerate(request, env, bypassCache);
-      }
-
-      if (url.pathname === "/api/open" && request.method === "GET") {
-        return await handleOpen(url, env, bypassCache);
+      if (url.pathname.startsWith("/api/")) {
+        return await handlePublicApi(
+          request,
+          env,
+          url,
+          bypassCache,
+        );
       }
 
       return env.ASSETS.fetch(request);
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-
-      if (url.pathname.startsWith("/api/")) {
-        return json({ error: message }, 400);
+      if (error instanceof ApiError) {
+        return apiError(error);
       }
 
-      return new Response(message, { status: 500 });
+      const message =
+        error instanceof Error ? error.message : String(error);
+
+      return apiError(
+        new ApiError("INTERNAL_ERROR", message, 500),
+      );
     }
   },
 };
