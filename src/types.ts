@@ -53,10 +53,17 @@ export interface SubstitutionRule {
 export interface PrimeRule {
   pool: string;
   count_distribution: WeightedCount[];
+  printed_rarity_distribution?: Array<{ rarity: string; weight: number }>;
   target_categories_by_printed_rarity: Record<string, string[]>;
 }
 
 export interface ExtraGroup {
+  pool: string;
+  count: number;
+  category: string;
+}
+
+export interface BrickTopperGroup {
   pool: string;
   count: number;
   category: string;
@@ -78,10 +85,12 @@ export interface SetConfig {
     boosters_per_brick: number;
     base_profiles: BaseProfile[];
     substitutions: SubstitutionRule[];
+    toppers?: { groups: BrickTopperGroup[] };
     prime?: PrimeRule;
     extras?: {
-      assignment?: "one_per_booster" | "random" | "random_bounded";
+      assignment?: "one_per_booster" | "random" | "random_bounded" | "balanced_displacement";
       max_per_booster?: number;
+      displacement_distribution?: WeightedCount[];
       groups: ExtraGroup[];
     };
   };
@@ -103,6 +112,7 @@ export interface BoosterResult {
 
 export interface BrickResult {
   brick_index: number;
+  toppers?: GeneratedCard[];
   boosters: BoosterResult[];
   summary: Record<string, number>;
 }

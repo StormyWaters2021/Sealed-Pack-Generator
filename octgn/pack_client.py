@@ -39,10 +39,14 @@ def get_selected_model_ids(result):
         return ids
 
     if kind == "brick":
+        for card in selected.get("toppers", []):
+            ids.append(card["model_id"])
         boosters = selected["boosters"]
     else:
         boosters = []
         for brick in selected["bricks"]:
+            for card in brick.get("toppers", []):
+                ids.append(card["model_id"])
             boosters.extend(brick["boosters"])
 
     for booster in boosters:

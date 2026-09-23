@@ -4,12 +4,19 @@ const ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
 const SEED_LENGTH = 10;
 
 export function randomSeed(): string {
-  const bytes = new Uint8Array(SEED_LENGTH);
-  crypto.getRandomValues(bytes);
-
+  // Rejection sampling avoids modulo bias because 256 is not divisible by the
+  // 31-character seed alphabet. This affects only newly issued random codes;
+  // deterministic generation from an existing code is unchanged.
+  const unbiasedLimit = Math.floor(256 / ALPHABET.length) * ALPHABET.length;
   let out = "";
-  for (let i = 0; i < SEED_LENGTH; i++) {
-    out += ALPHABET[bytes[i] % ALPHABET.length];
+  while (out.length < SEED_LENGTH) {
+    const bytes = new Uint8Array(SEED_LENGTH - out.length + 2);
+    crypto.getRandomValues(bytes);
+    for (const byte of bytes) {
+      if (byte >= unbiasedLimit) continue;
+      out += ALPHABET[byte % ALPHABET.length];
+      if (out.length === SEED_LENGTH) break;
+    }
   }
   return out;
 }

@@ -22,7 +22,7 @@ Example body:
 
 Generic product values are `case`, `box`, and `pack`. `brick` is accepted as an alias for `box`, and `booster` as an alias for `pack`. An optional `seed` may be supplied.
 
-`GET /api/open?code=HC-TB-V2-G2-7M4Q2P8ABC-B1-P01` regenerates an existing product.
+`GET /api/open?code=HC-TB-V3-G3-7M4Q2P8ABC-B1-P01` regenerates an existing product.
 
 Success:
 
@@ -71,14 +71,14 @@ Response:
 
 ```text
 OK
-CODE	HC-TB-V2-G2-...
+CODE	HC-TB-V3-G3-...
 PRODUCT	box
 DISPLAY	Brick
 MODEL	<MODEL-GUID>	1
 MODEL	<MODEL-GUID>	2
 ```
 
-`GET /octgn/open?code=HC-TB-V2-G2-...` regenerates an existing product.
+`GET /octgn/open?code=HC-TB-V3-G3-...` regenerates an existing product.
 
 Expected OCTGN application errors deliberately use HTTP 200 so OCTGN can retain the response body:
 

@@ -8,15 +8,15 @@ There are **no accounts and no database**. Every opening is recreated entirely f
 
 Example case:
 
-`HC-TB-V2-G2-7M4Q2P8ABC`
+`HC-TB-V3-G3-7M4Q2P8ABC`
 
 Example brick:
 
-`HC-TB-V2-G2-7M4Q2P8ABC-B2`
+`HC-TB-V3-G3-7M4Q2P8ABC-B2`
 
 Example pack:
 
-`HC-TB-V2-G2-7M4Q2P8ABC-B2-P07`
+`HC-TB-V3-G3-7M4Q2P8ABC-B2-P07`
 
 The fields mean:
 
@@ -84,7 +84,7 @@ data/
 
 The config and catalog files are fetched at runtime and cached briefly, so adding a new set or switching to a new config version does not require changing the website code.
 
-## Thunderbolts V2 model
+## Thunderbolts V3 model
 
 The included starting configuration uses:
 
@@ -109,6 +109,7 @@ Extras:
 
 - 8 One-Shots per brick
 - 4 terrain pieces per brick
+- 1 Legacy Card brick topper per brick; brick toppers are outside the 12 boosters
 - one extra insert assigned to each booster
 
 These are configuration values, not hard-coded engine rules.
@@ -174,7 +175,7 @@ The OCTGN integration should never invent its own randomness.
 
 It should request/open a share code and announce the exact code in chat, for example:
 
-`Sealed Pool: HC-TB-V2-G2-7M4Q2P8ABC-B2-P07`
+`Sealed Pool: HC-TB-V3-G3-7M4Q2P8ABC-B2-P07`
 
 Anyone can paste that code into the website and verify the identical pack.
 
@@ -205,11 +206,11 @@ The page uses the same core light/dark palette as the TCG Deck Builder:
 
 The selected theme is stored locally in the browser.
 
-## Thunderbolts V2 insert placement
+## Thunderbolts V3 insert placement
 
-Thunderbolts V2 is the current configuration. It currently keeps the brick-level baseline of 8 One-Shots and 4 terrain pieces, but does not force exactly one insert into every booster. Inserts are distributed deterministically across the brick with a maximum of two per booster.
+Thunderbolts V3 is the current configuration. It currently keeps the brick-level baseline of 8 One-Shots and 4 terrain pieces, but does not force exactly one insert into every booster. Inserts are distributed deterministically across the brick with a maximum of two per booster.
 
-V1/G1 remains preserved for deterministic reproduction of existing codes; new Thunderbolts generation uses V2/G2.
+V1/G1 and V2/G2 remain preserved for deterministic reproduction of existing codes; new Thunderbolts generation uses V3/G3. V3/G3 adds one Legacy Card brick topper to every brick. Brick and case requests include those toppers; pack requests never include them.
 
 
 ## API split
@@ -220,3 +221,7 @@ The Worker exposes two interfaces over the same deterministic generation core:
 - `/octgn/*` — OCTGN adapter using form-urlencoded input and tab-delimited plain-text output.
 
 The API/interface work preserves Thunderbolts V1/G1 collation, seed interpretation, and existing share-code reproduction. New generation uses V2/G2.
+
+### V3/G3 Thunderbolts refinements
+
+V3/G3 supports balanced extra displacement: start with one extra per pack, then use the configured displacement weights to create matched dead/double pack pairs without changing the brick's total extras. Thunderbolts uses weights 95/5/1 for 0/1/2 displacements (approximately 94.06% / 4.95% / 0.99%). V3 also supports printed-rarity weighting for Prime selection; Thunderbolts uses 10:2 Rare:Super Rare. Random seed creation now uses rejection sampling to avoid modulo bias; existing deterministic codes are unaffected.

@@ -4,6 +4,7 @@ const state = {
   result: null,
   openedPacks: new Map(),
   newModelIds: new Set(),
+  productCards: [],
 };
 
 const el = (id) => document.getElementById(id);
@@ -167,6 +168,7 @@ async function openCode(code) {
 }
 
 function groupLabel(card) {
+  if (card.category === "brick_topper") return "Legacy Card";
   if (card.category === "one_shot") return "One-Shot";
   if (card.category === "terrain") return "Terrain";
   if (card.prime) return `Prime · ${card.rarity}`;
@@ -190,6 +192,7 @@ const groupOrder = [
   "Common",
   "One-Shot",
   "Terrain",
+  "Legacy Card",
 ];
 
 function packCards(pack) {
@@ -197,7 +200,10 @@ function packCards(pack) {
 }
 
 function currentCards() {
-  return [...state.openedPacks.values()].flatMap(packCards);
+  return [
+    ...state.productCards,
+    ...[...state.openedPacks.values()].flatMap(packCards),
+  ];
 }
 
 function renderPulls() {
@@ -315,6 +321,7 @@ function openPack(brickIndex, packIndex) {
 
 function clearPulls() {
   state.openedPacks.clear();
+  state.productCards = [];
   state.newModelIds.clear();
 
   if (state.result) {
@@ -362,11 +369,20 @@ function renderBrick(brick, caseCodeValue) {
     </button>`;
   }).join("");
 
+  const toppers = (brick.toppers || []).map((card) => `
+    <div class="card-row brick-topper-row">
+      <span class="collector">${escapeHtml(card.collector_number)}</span>
+      <span class="card-name">${escapeHtml(card.name)}</span>
+      <span class="rarity-chip">Brick Topper</span>
+    </div>
+  `).join("");
+
   return `<div class="brick-card">
     <div class="brick-header">
       <h3>Brick ${brick.brick_index}</h3>
       <div class="mini-code">${escapeHtml(brickCodeValue)}</div>
     </div>
+    ${toppers ? `<div class="brick-toppers">${toppers}</div>` : ""}
     <div class="pack-grid">${packs}</div>
   </div>`;
 }
@@ -390,6 +406,15 @@ function renderHierarchy(result) {
 function resetOpenedState(result) {
   state.openedPacks = new Map();
   state.newModelIds = new Set();
+  state.productCards = [];
+
+  if (result.kind === "brick") {
+    state.productCards = [...(result.selected.toppers || [])];
+    state.newModelIds = new Set(state.productCards.map((card) => card.model_id));
+  } else if (result.kind === "case") {
+    state.productCards = result.selected.bricks.flatMap((brick) => brick.toppers || []);
+    state.newModelIds = new Set(state.productCards.map((card) => card.model_id));
+  }
 
   if (result.kind === "pack") {
     state.openedPacks.set(result.code, result.selected);

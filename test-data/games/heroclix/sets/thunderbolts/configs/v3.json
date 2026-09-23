@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "name": "Marvel HeroClix: Thunderbolts",
+  "catalog_url": "../catalogs/v1.json",
+  "cache_seconds": 300,
+  "case": {
+    "bricks_per_case": 2
+  },
+  "brick": {
+    "boosters_per_brick": 12,
+    "base_profiles": [
+      {
+        "count": 8,
+        "slots": [
+          "common",
+          "common",
+          "common",
+          "uncommon",
+          "rare"
+        ]
+      },
+      {
+        "count": 4,
+        "slots": [
+          "common",
+          "common",
+          "uncommon",
+          "uncommon",
+          "rare"
+        ]
+      }
+    ],
+    "substitutions": [
+      {
+        "id": "character_sr",
+        "from_category": "rare",
+        "to_category": "character_sr",
+        "pool": "character_sr",
+        "count": 3
+      },
+      {
+        "id": "standard_chase",
+        "from_category": "rare",
+        "to_category": "standard_chase",
+        "pool": "standard_chase",
+        "count": 1
+      },
+      {
+        "id": "sr_equipment",
+        "from_category": "common",
+        "to_category": "sr_equipment",
+        "pool": "sr_equipment",
+        "count_distribution": [
+          {
+            "value": 1,
+            "weight": 9
+          },
+          {
+            "value": 2,
+            "weight": 2
+          }
+        ]
+      },
+      {
+        "id": "extra_chase",
+        "from_category": "common",
+        "to_category": "extra_chase",
+        "pool": "extra_chase",
+        "count_distribution": [
+          {
+            "value": 0,
+            "weight": 10
+          },
+          {
+            "value": 1,
+            "weight": 3
+          }
+        ]
+      }
+    ],
+    "prime": {
+      "pool": "prime",
+      "count_distribution": [
+        {
+          "value": 0,
+          "weight": 1
+        },
+        {
+          "value": 1,
+          "weight": 12
+        }
+      ],
+      "target_categories_by_printed_rarity": {
+        "Rare": [
+          "rare"
+        ],
+        "Super Rare": [
+          "character_sr"
+        ]
+      },
+      "printed_rarity_distribution": [
+        {
+          "rarity": "Rare",
+          "weight": 10
+        },
+        {
+          "rarity": "Super Rare",
+          "weight": 2
+        }
+      ]
+    },
+    "extras": {
+      "assignment": "balanced_displacement",
+      "groups": [
+        {
+          "pool": "one_shot",
+          "count": 8,
+          "category": "one_shot"
+        },
+        {
+          "pool": "terrain",
+          "count": 4,
+          "category": "terrain"
+        }
+      ],
+      "max_per_booster": 2,
+      "displacement_distribution": [
+        {
+          "value": 0,
+          "weight": 95
+        },
+        {
+          "value": 1,
+          "weight": 5
+        },
+        {
+          "value": 2,
+          "weight": 1
+        }
+      ]
+    },
+    "toppers": {
+      "groups": [
+        {
+          "pool": "legacy_card",
+          "count": 1,
+          "category": "brick_topper"
+        }
+      ]
+    }
+  },
+  "pools": {
+    "common": {
+      "unit_types": [
+        "Character"
+      ],
+      "rarities": [
+        "Common"
+      ],
+      "prime": false
+    },
+    "uncommon": {
+      "unit_types": [
+        "Character"
+      ],
+      "rarities": [
+        "Uncommon"
+      ],
+      "prime": false
+    },
+    "rare": {
+      "unit_types": [
+        "Character"
+      ],
+      "rarities": [
+        "Rare"
+      ],
+      "prime": false
+    },
+    "character_sr": {
+      "unit_types": [
+        "Character"
+      ],
+      "rarities": [
+        "Super Rare"
+      ],
+      "prime": false
+    },
+    "sr_equipment": {
+      "unit_types": [
+        "Equipment"
+      ],
+      "rarities": [
+        "Super Rare"
+      ],
+      "prime": false
+    },
+    "prime": {
+      "unit_types": [
+        "Character"
+      ],
+      "prime": true
+    },
+    "standard_chase": {
+      "unit_types": [
+        "Character"
+      ],
+      "rarities": [
+        "Chase"
+      ],
+      "collector_numbers": [
+        "053",
+        "054",
+        "055",
+        "056",
+        "057",
+        "058",
+        "059",
+        "060",
+        "061",
+        "062"
+      ]
+    },
+    "extra_chase": {
+      "unit_types": [
+        "Character"
+      ],
+      "rarities": [
+        "Chase"
+      ],
+      "collector_numbers": [
+        "004b",
+        "007b",
+        "009b",
+        "018b"
+      ]
+    },
+    "one_shot": {
+      "unit_types": [
+        "One Shot"
+      ],
+      "exclude_collector_numbers": [
+        "OS017"
+      ]
+    },
+    "terrain": {
+      "unit_types": [
+        "Terrain Marker"
+      ],
+      "collector_regex": "^MV62-t(00[5-9]|01[0-8])$"
+    },
+    "legacy_card": {
+      "unit_types": [
+        "Legacy Card"
+      ]
+    }
+  },
+  "pool_policies": {
+    "common": {
+      "unique_scope": "none"
+    },
+    "uncommon": {
+      "unique_scope": "none"
+    },
+    "rare": {
+      "unique_scope": "none"
+    },
+    "character_sr": {
+      "unique_scope": "brick"
+    },
+    "sr_equipment": {
+      "unique_scope": "brick"
+    },
+    "prime": {
+      "unique_scope": "brick"
+    },
+    "standard_chase": {
+      "unique_scope": "brick"
+    },
+    "extra_chase": {
+      "unique_scope": "brick"
+    },
+    "one_shot": {
+      "unique_scope": "brick"
+    },
+    "terrain": {
+      "unique_scope": "brick"
+    },
+    "legacy_card": {
+      "unique_scope": "brick"
+    }
+  },
+  "config_version": 3,
+  "engine_version": 3,
+  "game_id": "heroclix",
+  "set_id": "thunderbolts"
+}

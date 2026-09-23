@@ -227,7 +227,7 @@ async function generateFromSeed(
   seed: string,
   bypassCache: boolean,
 ) {
-  if (engineVersion !== 1 && engineVersion !== 2) {
+  if (engineVersion !== 1 && engineVersion !== 2 && engineVersion !== 3) {
     throw new ApiError(
       "ENGINE_VERSION_NOT_SUPPORTED",
       `Generator G${engineVersion} is not supported by this deployment.`,
@@ -499,19 +499,23 @@ function selectedCards(opened: OpenedPool) {
 
   if (opened.kind === "brick") {
     const brick = opened.selected as BrickResult;
-    return brick.boosters.flatMap((pack) => [
-      ...pack.cards,
-      ...(pack.extras || []),
-    ]);
+    return [
+      ...(brick.toppers || []),
+      ...brick.boosters.flatMap((pack) => [
+        ...pack.cards,
+        ...(pack.extras || []),
+      ]),
+    ];
   }
 
   const generatedCase = opened.selected as CaseResult;
-  return generatedCase.bricks.flatMap((brick) =>
-    brick.boosters.flatMap((pack) => [
+  return generatedCase.bricks.flatMap((brick) => [
+    ...(brick.toppers || []),
+    ...brick.boosters.flatMap((pack) => [
       ...pack.cards,
       ...(pack.extras || []),
     ]),
-  );
+  ]);
 }
 
 function flattenModels(

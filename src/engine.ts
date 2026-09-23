@@ -110,7 +110,26 @@ function applyPrimes(
     if (scope === "case") eligible = primePool.filter((c) => !state.caseUsed.has(c.model_id));
     if (!eligible.length) throw new Error("Prime pool exhausted");
 
-    const prime = eligible[rng.int(eligible.length)];
+    let primeCandidates = eligible;
+    if (rule.printed_rarity_distribution?.length) {
+      const availableRarities = rule.printed_rarity_distribution.filter((entry) =>
+        eligible.some((card) => card.rarity === entry.rarity),
+      );
+      if (!availableRarities.length) throw new Error("No configured Prime rarities are available");
+      const totalWeight = availableRarities.reduce((sum, entry) => sum + entry.weight, 0);
+      let pick = rng.next() * totalWeight;
+      let chosenRarity = availableRarities[availableRarities.length - 1].rarity;
+      for (const entry of availableRarities) {
+        pick -= entry.weight;
+        if (pick < 0) {
+          chosenRarity = entry.rarity;
+          break;
+        }
+      }
+      primeCandidates = eligible.filter((card) => card.rarity === chosenRarity);
+    }
+
+    const prime = primeCandidates[rng.int(primeCandidates.length)];
     const categories = rule.target_categories_by_printed_rarity[prime.rarity];
     if (!categories?.length) throw new Error(`No prime targets configured for '${prime.rarity}'`);
 
@@ -145,6 +164,37 @@ function assignExtras(
   const targets = rng.shuffle(boosters.map((_, i) => i));
   const extraCounts = boosters.map(() => 0);
 
+  if (extras.assignment === "balanced_displacement") {
+    if (assignments.length !== boosters.length) {
+      throw new Error("balanced_displacement requires exactly one extra per booster before displacement");
+    }
+    const distribution = extras.displacement_distribution ?? [{ value: 0, weight: 1 }];
+    const displacementCount = weightedValue(distribution, rng);
+    if (displacementCount * 2 > boosters.length) {
+      throw new Error(`Cannot make ${displacementCount} displacements across ${boosters.length} boosters`);
+    }
+
+    // Begin with exactly one extra assigned to each booster. A displacement moves
+    // one whole extra assignment from a donor pack to a distinct recipient pack,
+    // producing a matched dead/double pair while preserving the brick total.
+    const assigned = targets.map((target, i) => ({ target, extra: shuffled[i] }));
+    const participants = rng.shuffle(boosters.map((_, i) => i));
+    for (let i = 0; i < displacementCount; i++) {
+      const donor = participants[i * 2];
+      const recipient = participants[i * 2 + 1];
+      const donorAssignment = assigned.find((entry) => entry.target === donor);
+      if (!donorAssignment) throw new Error("Displacement donor has no extra");
+      donorAssignment.target = recipient;
+    }
+
+    for (const entry of assigned) {
+      boosters[entry.target].extras.push(
+        drawCard(entry.extra.pool, entry.extra.category, pools, config, state, rng, boosterUsed?.[entry.target]),
+      );
+    }
+    return;
+  }
+
   for (let i = 0; i < shuffled.length; i++) {
     let target: number;
 
@@ -173,6 +223,19 @@ function assignExtras(
     );
     extraCounts[target]++;
   }
+}
+
+function generateBrickToppers(
+  config: SetConfig, pools: Record<string, CatalogCard[]>,
+  state: GenerationState, rng: RandomSource
+): GeneratedCard[] {
+  const toppers: GeneratedCard[] = [];
+  for (const group of config.brick.toppers?.groups ?? []) {
+    for (let i = 0; i < group.count; i++) {
+      toppers.push(drawCard(group.pool, group.category, pools, config, state, rng));
+    }
+  }
+  return toppers;
 }
 
 function summarizeBrick(boosters: BoosterResult[]): Record<string, number> {
@@ -204,6 +267,8 @@ export function generateBrick(
   // G2 adds booster-level uniqueness while G1 remains byte-for-byte compatible
   // with previously issued codes. Duplicates may still appear in different
   // boosters, bricks, and cases according to each pool's configured scope.
+  const toppers = generateBrickToppers(config, pools, state, rng);
+
   const enforceBoosterUniqueness = config.engine_version >= 2;
   const boosterUsed = enforceBoosterUniqueness
     ? slotPlan.map(() => new Set<string>())
@@ -228,7 +293,12 @@ export function generateBrick(
   }));
 
   assignExtras(boosters, config, pools, state, rng, boosterUsed);
-  return { brick_index: brickIndex, boosters, summary: summarizeBrick(boosters) };
+  return {
+    brick_index: brickIndex,
+    ...(toppers.length ? { toppers } : {}),
+    boosters,
+    summary: summarizeBrick(boosters),
+  };
 }
 
 export function generateCase(
