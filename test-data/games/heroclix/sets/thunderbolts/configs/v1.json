@@ -100,7 +100,7 @@
       }
     },
     "extras": {
-      "assignment": "one_per_booster",
+      "assignment": "random_bounded",
       "groups": [
         {
           "pool": "one_shot",
@@ -112,7 +112,8 @@
           "count": 4,
           "category": "terrain"
         }
-      ]
+      ],
+      "max_per_booster": 2
     }
   },
   "pools": {

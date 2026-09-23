@@ -80,7 +80,8 @@ export interface SetConfig {
     substitutions: SubstitutionRule[];
     prime?: PrimeRule;
     extras?: {
-      assignment?: "one_per_booster" | "random";
+      assignment?: "one_per_booster" | "random" | "random_bounded";
+      max_per_booster?: number;
       groups: ExtraGroup[];
     };
   };

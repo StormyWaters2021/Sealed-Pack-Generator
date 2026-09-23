@@ -138,11 +138,35 @@ function assignExtras(
 
   const shuffled = rng.shuffle(assignments);
   const targets = rng.shuffle(boosters.map((_, i) => i));
+  const extraCounts = boosters.map(() => 0);
 
   for (let i = 0; i < shuffled.length; i++) {
-    const target = extras.assignment === "one_per_booster" ? targets[i] : rng.int(boosters.length);
+    let target: number;
+
+    if (extras.assignment === "one_per_booster") {
+      target = targets[i];
+    } else if (extras.assignment === "random_bounded") {
+      const maxPerBooster = extras.max_per_booster ?? 2;
+      const eligible = boosters
+        .map((_, index) => index)
+        .filter((index) => extraCounts[index] < maxPerBooster);
+
+      if (!eligible.length) {
+        throw new Error(
+          `Extras cannot be assigned with max_per_booster=${maxPerBooster}`,
+        );
+      }
+
+      target = eligible[rng.int(eligible.length)];
+    } else {
+      target = rng.int(boosters.length);
+    }
+
     const x = shuffled[i];
-    boosters[target].extras.push(drawCard(x.pool, x.category, pools, config, state, rng));
+    boosters[target].extras.push(
+      drawCard(x.pool, x.category, pools, config, state, rng),
+    );
+    extraCounts[target]++;
   }
 }
 

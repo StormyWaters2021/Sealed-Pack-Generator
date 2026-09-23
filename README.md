@@ -188,3 +188,25 @@ The HeroClix game GUID and deck section are set per set config under `octgn`.
 ## Current production data source
 
 `https://raw.githubusercontent.com/StormyWaters2021/Pack-Generator-Data/main/`
+
+
+## UI behavior in v0.4
+
+When a Brick or Case is generated, pack contents remain hidden. Opening a pack keeps the parent Brick/Case on screen, marks the pack as Opened, and adds that pack's contents to the Pulls panel. The newest pack's added rows are bold until another pack is opened.
+
+The Pulls panel scrolls independently on desktop and the OCTGN export contains the packs opened in the current browser session.
+
+## Theme
+
+The page uses the same core light/dark palette as the TCG Deck Builder:
+
+- dark: `#181a1b` body, `#2a2a2a` panels, `#23272a` inputs, gold `#ffd700` / `#b7950b`
+- light: `#f8f9fa` body, `#f5f5f5` panels, white inputs, blue `#0056b3` / `#2980b9`
+
+The selected theme is stored locally in the browser.
+
+## Thunderbolts V1 insert placement
+
+Thunderbolts V1 is still the working pre-release configuration. It currently keeps the brick-level baseline of 8 One-Shots and 4 terrain pieces, but does not force exactly one insert into every booster. Inserts are distributed deterministically across the brick with a maximum of two per booster.
+
+Do not create V2 until V1 is explicitly declared live/frozen.
