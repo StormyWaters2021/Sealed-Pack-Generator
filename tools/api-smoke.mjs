@@ -12,7 +12,6 @@ for (const required of [
   "/octgn/sets",
   "/octgn/generate",
   "/octgn/open",
-  "application/x-www-form-urlencoded",
   "application/json",
   "INVALID_CODE",
   "GAME_NOT_CONFIGURED",

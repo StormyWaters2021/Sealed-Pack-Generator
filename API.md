@@ -59,13 +59,9 @@ GAME	HeroClix
 SET	thunderbolts	TB	Marvel HeroClix: Thunderbolts
 ```
 
-`POST /octgn/generate` uses `application/x-www-form-urlencoded`.
+`GET /octgn/generate?gameid=<OCTGN-GAME-GUID>&set=thunderbolts&product=box`
 
-Body:
-
-```text
-gameid=<OCTGN-GAME-GUID>&set=thunderbolts&product=box
-```
+An optional deterministic seed can be supplied as `&seed=<seed>`. The OCTGN adapter uses GET so it can be called with OCTGN's documented `webRead()` API; no `webPost()` or JSON support is required.
 
 Response:
 

@@ -648,22 +648,11 @@ async function handleOctgnApi(
       ]);
     }
 
-    if (url.pathname === "/octgn/generate" && request.method === "POST") {
-      const contentType =
-        request.headers.get("content-type")?.toLowerCase() ?? "";
-
-      if (!contentType.includes("application/x-www-form-urlencoded")) {
-        return octgnError(
-          "UNSUPPORTED_MEDIA_TYPE",
-          "OCTGN generation requests must be form-urlencoded.",
-        );
-      }
-
-      const params = new URLSearchParams(await request.text());
-      const octgnGameId = params.get("gameid")?.trim() ?? "";
-      const setId = params.get("set")?.trim() ?? "";
-      const product = params.get("product")?.trim() ?? "";
-      const seed = params.get("seed")?.trim() || undefined;
+    if (url.pathname === "/octgn/generate" && request.method === "GET") {
+      const octgnGameId = url.searchParams.get("gameid")?.trim() ?? "";
+      const setId = url.searchParams.get("set")?.trim() ?? "";
+      const product = url.searchParams.get("product")?.trim() ?? "";
+      const seed = url.searchParams.get("seed")?.trim() || undefined;
 
       if (!octgnGameId) {
         return octgnError("MISSING_GAME_ID", "gameid is required.");
