@@ -153,7 +153,8 @@ function assignExtras(
 
   const assignments: Array<{ pool: string; category: string }> = [];
   for (const group of extras.groups) {
-    for (let i = 0; i < group.count; i++) assignments.push({ pool: group.pool, category: group.category });
+    const count = group.count ?? weightedValue(group.count_distribution ?? [], rng);
+    for (let i = 0; i < count; i++) assignments.push({ pool: group.pool, category: group.category });
   }
 
   if (extras.assignment === "one_per_booster" && assignments.length > boosters.length) {
@@ -269,7 +270,7 @@ export function generateBrick(
   // boosters, bricks, and cases according to each pool's configured scope.
   const toppers = generateBrickToppers(config, pools, state, rng);
 
-  const enforceBoosterUniqueness = config.engine_version >= 2;
+  const enforceBoosterUniqueness = config.brick.booster_uniqueness ?? config.engine_version >= 2;
   const boosterUsed = enforceBoosterUniqueness
     ? slotPlan.map(() => new Set<string>())
     : undefined;

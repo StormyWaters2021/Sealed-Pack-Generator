@@ -59,7 +59,8 @@ export interface PrimeRule {
 
 export interface ExtraGroup {
   pool: string;
-  count: number;
+  count?: number;
+  count_distribution?: WeightedCount[];
   category: string;
 }
 
@@ -83,6 +84,7 @@ export interface SetConfig {
   };
   brick: {
     boosters_per_brick: number;
+    booster_uniqueness?: boolean;
     base_profiles: BaseProfile[];
     substitutions: SubstitutionRule[];
     toppers?: { groups: BrickTopperGroup[] };
